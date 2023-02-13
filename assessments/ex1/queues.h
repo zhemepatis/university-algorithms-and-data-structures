@@ -8,5 +8,7 @@
 
     Queue_node *createQueue();
     void initialiseNode(Queue_node *node);
+    void push(Queue_node *node, int value);
+    int pop(Queue_node **node);
 
 #endif
