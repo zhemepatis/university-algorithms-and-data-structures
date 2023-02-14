@@ -11,5 +11,6 @@
     void push(Queue *node, int value);
     int pop(Queue **node);
     int length(Queue *node);
+    int peek(Queue *node);
 
 #endif

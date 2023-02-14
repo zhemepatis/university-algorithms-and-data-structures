@@ -46,8 +46,8 @@ int pop(Queue **node) {
     return result;
 }
 
-void peek() {
-
+int peek(Queue *node) {
+    return node->value;
 }
 
 int length(Queue *node) {
@@ -63,5 +63,5 @@ int length(Queue *node) {
 }
 
 void destroy() {
-
+  
 }
