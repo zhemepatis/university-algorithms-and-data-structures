@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "queues.h"
+#include "queue.h"
 
-Queue_node *createQueue() {
-    Queue_node *node = malloc(sizeof(Queue_node));
+Queue *createQueue() {
+    Queue *node = malloc(sizeof(Queue));
     initialiseNode(node);
 
     return node;
 }
 
-void initialiseNode(Queue_node *node) {
+void initialiseNode(Queue *node) {
     node->next = NULL;
     node->value = 0;
 }
 
-int isEmpty(Queue_node *node) {
+int isEmpty(Queue *node) {
     if(node->next == NULL)
         return 1;
     
@@ -27,19 +27,19 @@ int isFull() {
 
 }
 
-void push(Queue_node *node, int value) {
-    Queue_node *currentNodePtr = node;
+void push(Queue *node, int value) {
+    Queue *currentNodePtr = node;
 
     while(currentNodePtr->next != NULL) {
         currentNodePtr = currentNodePtr->next;
     }
 
     currentNodePtr->value = value;
-    currentNodePtr->next = malloc(sizeof(Queue_node));
+    currentNodePtr->next = malloc(sizeof(Queue));
     initialiseNode(currentNodePtr->next);
 }
 
-int pop(Queue_node **node) {
+int pop(Queue **node) {
     int result = (*node)->value;
     *node = (*node)->next;
 
@@ -50,8 +50,16 @@ void peek() {
 
 }
 
-int length() {
+int length(Queue *node) {
+    Queue *currentNodePtr = node;
+    int length = 0;
 
+    while(currentNodePtr->next != NULL) {
+        ++length;
+        currentNodePtr = currentNodePtr->next;
+    }
+
+    return length;
 }
 
 void destroy() {
