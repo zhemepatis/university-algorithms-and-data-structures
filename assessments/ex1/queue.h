@@ -23,5 +23,6 @@
     int queueIsEmpty(queue data);
     int queueIsFull(queue data);
     void makeEmptyQueue(queue data);
+    queue cloneQueue(queue data);
 
 #endif

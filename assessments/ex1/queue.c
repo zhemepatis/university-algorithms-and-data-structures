@@ -96,3 +96,17 @@ void makeEmptyQueue(queue data) {
         currentNodePtr = currentNodePtr->next;
     }
 }
+
+queue cloneQueue(queue data) {
+    queue clonedQueue;
+    initialiseQueue(&clonedQueue);
+
+    queue_node *currentNodePtr = data.front;
+
+    while(currentNodePtr != NULL) {
+        enqueue(&clonedQueue, currentNodePtr->value);
+        currentNodePtr = currentNodePtr->next;
+    }
+
+    return clonedQueue;
+}

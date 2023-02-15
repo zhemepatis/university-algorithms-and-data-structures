@@ -6,31 +6,25 @@
 void displayData(char *str, queue data);
 
 int main() {
-    // initialiseQueue
     queue testQueue;
     initialiseQueue(&testQueue);
     displayData("Initialisation", testQueue);
 
-    // enqueue and queueIsFull
-    enqueue(&testQueue, 1);
-    displayData("1 enqueue", testQueue);
-    enqueue(&testQueue, 2);
-    displayData("2 enqueue", testQueue);
-    enqueue(&testQueue, 3);
-    displayData("3 enqueue", testQueue);
-    enqueue(&testQueue, 4);
-    displayData("4 enqueue", testQueue);
-    enqueue(&testQueue, 5);
-    displayData("5 enqueue", testQueue);
+    for(int i = 0; i < 5; ++i) {
+        enqueue(&testQueue, i);
+    }
+    displayData("5 nqueues", testQueue);
 
     makeEmptyQueue(testQueue);
+    displayData("Empty queue", testQueue);
 
-    // peek
+    queue secondQueue = cloneQueue(testQueue);
+    displayData("Cloned queue", testQueue);
+
     int result;
     peekQueue(testQueue, &result);
     printf("Peek: %d\n\n", result);
 
-    // dequeue, queueIsEmpty, destroytQueue
     dequeue(&testQueue, &result);
     displayData("1 dequeue", testQueue);
 
