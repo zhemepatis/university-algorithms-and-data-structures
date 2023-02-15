@@ -3,31 +3,39 @@
 
 #include "queue.h"
 
+void printQueue(queue data);
+
 int main() {
-    queue testQueue;
-    initialiseQueue(&testQueue);
-    printf("%s\n", convertQueueToString(testQueue));
+    queue firstQueue;
+    initialiseQueue(&firstQueue);
+
+    printQueue(firstQueue);
 
     for(int i = 1; i <= MAX_QUEUE_LENGTH+1; ++i)
-        enqueue(&testQueue, i);
+        enqueue(&firstQueue, i);
 
-    printf("%s\n", convertQueueToString(testQueue));
+    printQueue(firstQueue);
+
+    queue secondQueue = cloneQueue(firstQueue);
+    printQueue(secondQueue);
+
+    int result;
+    dequeue(&firstQueue, &result);
+    dequeue(&firstQueue, &result);
+    printQueue(firstQueue);
+
+    makeEmptyQueue(firstQueue);
+    printQueue(firstQueue);
+    printQueue(secondQueue);
+
+    destroyQueue(&firstQueue);
+    destroyQueue(&secondQueue);
+    printQueue(firstQueue);
+    printQueue(secondQueue);
     
     return 0;
 }
 
-void displayData(char *str, queue data) {
-    printf("*** %s ***\n", str);
-
-    printf("Length: %d\n", queueLength(data));
-
-    printf("Front: %d\n", data.front);
-    if(data.front != NULL)
-        printf("Front value: %d\n", (data.front)->value);
-
-    printf("Rear: %d\n", data.rear);
-    if(data.rear != NULL)
-        printf("Rear value: %d\n", (data.rear)->value);
-
-    printf("\n");
+void printQueue(queue data) {
+    printf("%s\n", convertQueueToString(data));
 }
