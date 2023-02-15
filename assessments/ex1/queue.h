@@ -16,6 +16,7 @@
     int dequeue(queue *data, int *storage);
     int peek(queue data);
     int queueLength(queue data);
+    void destroyQueue(queue *data);
 
 
 

@@ -69,6 +69,11 @@ int queueLength(queue data) {
     return length;
 }
 
-void destroyQueue() {
-    
+void destroyQueue(queue *data) {
+    while(data->front != NULL) {
+        queue_node *nextNodePtr = data->front->next;
+        free(data->front);
+        data->front = nextNodePtr;
+    }
+    data->rear = NULL;
 }

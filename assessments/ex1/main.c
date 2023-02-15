@@ -3,38 +3,47 @@
 
 #include "queue.h"
 
-void test(char *str, queue data);
+void displayData(char *str, queue data);
 
 int main() {
-    queue testQueue;
-    initialiseQueue(&testQueue);
-    test("Initialisation", testQueue);
+    queue displayDataQueue;
+    initialiseQueue(&displayDataQueue);
+    displayData("Initialisation", displayDataQueue);
 
-    enqueue(&testQueue, 69);
-    test("1 enqueue", testQueue);
+    enqueue(&displayDataQueue, 1);
+    displayData("1 enqueue", displayDataQueue);
 
-    enqueue(&testQueue, 42);
-    test("2 enqueue", testQueue);
+    enqueue(&displayDataQueue, 2);
+    displayData("2 enqueue", displayDataQueue);
 
-    enqueue(&testQueue, 53);
-    test("3 enqueue", testQueue);
+    enqueue(&displayDataQueue, 3);
+    displayData("3 enqueue", displayDataQueue);
 
-    printf("Peek: %d\n\n", peek(testQueue));
+    printf("Peek: %d\n\n", peek(displayDataQueue));
 
     int result;
-    dequeue(&testQueue, &result);
-    test("1 dequeue", testQueue);
+    dequeue(&displayDataQueue, &result);
+    displayData("1 dequeue", displayDataQueue);
 
-    dequeue(&testQueue, &result);
-    test("2 dequeue", testQueue);
+    dequeue(&displayDataQueue, &result);
+    displayData("2 dequeue", displayDataQueue);
 
-    dequeue(&testQueue, &result);
-    test("3 dequeue", testQueue);
+    dequeue(&displayDataQueue, &result);
+    displayData("3 dequeue", displayDataQueue);
+
+    destroyQueue(&displayDataQueue);
+    displayData("Queue destruction 1", displayDataQueue);
+
+    enqueue(&displayDataQueue, 10);
+    enqueue(&displayDataQueue, 11);
+    enqueue(&displayDataQueue, 12);
+    destroyQueue(&displayDataQueue);
+    displayData("Queue destruction 2", displayDataQueue);
 
     return 0;
 }
 
-void test(char *str, queue data) {
+void displayData(char *str, queue data) {
     printf("*** %s ***\n", str);
 
     printf("Length: %d\n", queueLength(data));
