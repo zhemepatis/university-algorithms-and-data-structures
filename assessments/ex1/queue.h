@@ -1,16 +1,23 @@
 #ifndef QUEUE_H
     #define QUEUE_H
 
-    typedef struct Queue {
+    typedef struct node {
         int value;
-        struct Queue *next;
-    } Queue;
+        struct node *next;
+    } queue_node;
 
-    Queue *createQueue();
-    void initialiseNode(Queue *node);
-    void push(Queue *node, int value);
-    int pop(Queue **node);
-    int length(Queue *node);
-    int peek(Queue *node);
+    typedef struct queue {
+        queue_node *front;
+        queue_node *rear;
+    } queue;
+
+    void initialiseQueue(queue *data);
+    void enqueue(queue *data, int value);
+    int dequeue(queue *data, int *storage);
+    int peek(queue data);
+    int queueLength(queue data);
+
+
+
 
 #endif

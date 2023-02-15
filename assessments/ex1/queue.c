@@ -3,58 +3,65 @@
 
 #include "queue.h"
 
-Queue *createQueue() {
-    Queue *node = malloc(sizeof(Queue));
-    initialiseNode(node);
-
-    return node;
+void initialiseQueue(queue *data) {
+    data->front = NULL;
+    data->rear = NULL;
 }
 
-void initialiseNode(Queue *node) {
-    node->next = NULL;
-    node->value = 0;
-}
-
-int isEmpty(Queue *node) {
-    if(node->next == NULL)
+int queueIsEmpty(queue data) {
+    if(!data.front && !data.rear)
         return 1;
-    
+
     return 0;
 }
 
-int isFull() {
-
+int queueIsFull(queue data) {
 
 }
 
-void push(Queue *node, int value) {
-    Queue *currentNodePtr = node;
+void enqueue(queue *data, int value) {
+    // check whether it is not full
 
-    while(currentNodePtr->next != NULL) {
-        currentNodePtr = currentNodePtr->next;
+    queue_node *newNodePtr = malloc(sizeof(queue_node));
+    newNodePtr->value = value;
+    newNodePtr->next = NULL;
+
+    if(data->rear != NULL) {
+        queue_node *lastNodePtr = data->rear;
+        lastNodePtr->next = newNodePtr;
     }
 
-    currentNodePtr->value = value;
-    currentNodePtr->next = malloc(sizeof(Queue));
-    initialiseNode(currentNodePtr->next);
+    data->rear = newNodePtr;
+
+    if(data->front == NULL)
+        data->front = data->rear;
 }
 
-int pop(Queue **node) {
-    int result = (*node)->value;
-    *node = (*node)->next;
+int dequeue(queue *data, int *storage) {
+    // chekcing whether queue isn't empty
+    if(queueIsEmpty(*data))
+        return 0;
 
-    return result;
+    queue_node *currentFrontPtr = data->front;
+    *storage = currentFrontPtr->value;
+
+    data->front = currentFrontPtr->next;
+    if(data->front == NULL)
+        data->rear = NULL;
+        
+    free(currentFrontPtr);
+    return 1;  
 }
 
-int peek(Queue *node) {
-    return node->value;
+int peek(queue data) {
+    return data.front->value;
 }
 
-int length(Queue *node) {
-    Queue *currentNodePtr = node;
+int queueLength(queue data) {
     int length = 0;
+    queue_node *currentNodePtr = data.front;
 
-    while(currentNodePtr->next != NULL) {
+    while(currentNodePtr != NULL) {
         ++length;
         currentNodePtr = currentNodePtr->next;
     }
@@ -62,6 +69,6 @@ int length(Queue *node) {
     return length;
 }
 
-void destroy() {
-  
+void destroyQueue() {
+    
 }
