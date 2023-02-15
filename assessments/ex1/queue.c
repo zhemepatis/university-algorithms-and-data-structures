@@ -16,11 +16,15 @@ int queueIsEmpty(queue data) {
 }
 
 int queueIsFull(queue data) {
-
+    if(queueLength(data) == MAX_QUEUE_LENGTH)
+        return 1;
+    
+    return 0;
 }
 
-void enqueue(queue *data, int value) {
-    // check whether it is not full
+int enqueue(queue *data, int value) {
+    if(queueIsFull(*data))
+        return 0;
 
     queue_node *newNodePtr = malloc(sizeof(queue_node));
     newNodePtr->value = value;
@@ -35,10 +39,11 @@ void enqueue(queue *data, int value) {
 
     if(data->front == NULL)
         data->front = data->rear;
+
+    return 1;
 }
 
 int dequeue(queue *data, int *storage) {
-    // chekcing whether queue isn't empty
     if(queueIsEmpty(*data))
         return 0;
 
@@ -53,8 +58,12 @@ int dequeue(queue *data, int *storage) {
     return 1;  
 }
 
-int peek(queue data) {
-    return data.front->value;
+int peek(queue data, int *storage) {
+    if(queueIsEmpty(data))
+        return 0;
+
+    *storage = data.front->value;
+    return 1;
 }
 
 int queueLength(queue data) {

@@ -1,5 +1,6 @@
 #ifndef QUEUE_H
     #define QUEUE_H
+    #define MAX_QUEUE_LENGTH 4
 
     typedef struct node {
         int value;
@@ -12,13 +13,12 @@
     } queue;
 
     void initialiseQueue(queue *data);
-    void enqueue(queue *data, int value);
+    int enqueue(queue *data, int value);
     int dequeue(queue *data, int *storage);
-    int peek(queue data);
+    int peek(queue data, int *storage);
     int queueLength(queue data);
     void destroyQueue(queue *data);
-
-
-
+    int queueIsEmpty(queue data);
+    int queueIsFull(queue data);
 
 #endif
