@@ -58,7 +58,7 @@ int dequeue(queue *data, int *storage) {
     return 1;  
 }
 
-int peek(queue data, int *storage) {
+int peekQueue(queue data, int *storage) {
     if(queueIsEmpty(data))
         return 0;
 
@@ -85,4 +85,17 @@ void destroyQueue(queue *data) {
         data->front = nextNodePtr;
     }
     data->rear = NULL;
+}
+
+void makeEmptyQueue(queue data) {
+    queue_node *currentNodePtr = data.front;
+
+    while(currentNodePtr != NULL) {
+        currentNodePtr->value = 0;
+        currentNodePtr = currentNodePtr->next;
+    }
+}
+
+queue cloneQueue(queue data) {
+    
 }

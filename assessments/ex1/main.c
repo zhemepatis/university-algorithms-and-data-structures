@@ -7,38 +7,41 @@ void displayData(char *str, queue data);
 
 int main() {
     // initialiseQueue
-    queue displayDataQueue;
-    initialiseQueue(&displayDataQueue);
-    displayData("Initialisation", displayDataQueue);
+    queue testQueue;
+    initialiseQueue(&testQueue);
+    displayData("Initialisation", testQueue);
 
     // enqueue and queueIsFull
-    enqueue(&displayDataQueue, 1);
-    displayData("1 enqueue", displayDataQueue);
-    enqueue(&displayDataQueue, 2);
-    displayData("2 enqueue", displayDataQueue);
-    enqueue(&displayDataQueue, 3);
-    displayData("3 enqueue", displayDataQueue);
-    enqueue(&displayDataQueue, 4);
-    displayData("4 enqueue", displayDataQueue);
-    enqueue(&displayDataQueue, 5);
-    displayData("5 enqueue", displayDataQueue);
+    enqueue(&testQueue, 1);
+    displayData("1 enqueue", testQueue);
+    enqueue(&testQueue, 2);
+    displayData("2 enqueue", testQueue);
+    enqueue(&testQueue, 3);
+    displayData("3 enqueue", testQueue);
+    enqueue(&testQueue, 4);
+    displayData("4 enqueue", testQueue);
+    enqueue(&testQueue, 5);
+    displayData("5 enqueue", testQueue);
+
+    makeEmptyQueue(testQueue);
 
     // peek
     int result;
-    printf("Peek: %d\n\n", peek(displayDataQueue, &result));
+    peekQueue(testQueue, &result);
+    printf("Peek: %d\n\n", result);
 
     // dequeue, queueIsEmpty, destroytQueue
-    dequeue(&displayDataQueue, &result);
-    displayData("1 dequeue", displayDataQueue);
+    dequeue(&testQueue, &result);
+    displayData("1 dequeue", testQueue);
 
-    destroyQueue(&displayDataQueue);
-    displayData("Queue destruction 1", displayDataQueue);
+    destroyQueue(&testQueue);
+    displayData("Queue destruction 1", testQueue);
 
-    destroyQueue(&displayDataQueue);
-    displayData("Queue destruction 2", displayDataQueue);
+    destroyQueue(&testQueue);
+    displayData("Queue destruction 2", testQueue);
 
-    dequeue(&displayDataQueue, &result);
-    displayData("2 dequeue", displayDataQueue);
+    dequeue(&testQueue, &result);
+    displayData("2 dequeue", testQueue);
 
 
 
