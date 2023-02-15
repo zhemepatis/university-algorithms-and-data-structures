@@ -110,3 +110,31 @@ queue cloneQueue(queue data) {
 
     return clonedQueue;
 }
+
+char *convertQueueToString(queue data) {
+    char *str = malloc(2*MAX_NODE_COUNT_IN_STRING*MAX_INT_DIGITS+9);
+    sprintf(str, "Queue");
+
+    if(queueIsEmpty(data)) {
+        strcat(str, " is empty");
+        return str;
+    }
+    strcat(str, ":");
+    queue_node *currentNodePtr = data.front;
+    int nodeCount = 0;
+
+    while(currentNodePtr != NULL && nodeCount < MAX_NODE_COUNT_IN_STRING) {
+        char numStr[MAX_INT_DIGITS+1];
+        sprintf(numStr, " %d", currentNodePtr->value);        
+        strcat(str, numStr);
+        
+        currentNodePtr = currentNodePtr->next;
+        ++nodeCount;
+    }
+
+    if(currentNodePtr)
+        strcat(str, "...");
+
+    return str;
+}
+

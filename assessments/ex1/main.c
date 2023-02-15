@@ -3,40 +3,16 @@
 
 #include "queue.h"
 
-void displayData(char *str, queue data);
-
 int main() {
     queue testQueue;
     initialiseQueue(&testQueue);
-    displayData("Initialisation", testQueue);
+    printf("%s\n", convertQueueToString(testQueue));
 
-    for(int i = 0; i < 5; ++i) {
+    for(int i = 1; i <= MAX_QUEUE_LENGTH+1; ++i)
         enqueue(&testQueue, i);
-    }
-    displayData("5 nqueues", testQueue);
 
-    makeEmptyQueue(testQueue);
-    displayData("Empty queue", testQueue);
-
-    queue secondQueue = cloneQueue(testQueue);
-    displayData("Cloned queue", testQueue);
-
-    int result;
-    peekQueue(testQueue, &result);
-    printf("Peek: %d\n\n", result);
-
-    dequeue(&testQueue, &result);
-    displayData("1 dequeue", testQueue);
-
-    destroyQueue(&testQueue);
-    displayData("Queue destruction 1", testQueue);
-
-    destroyQueue(&testQueue);
-    displayData("Queue destruction 2", testQueue);
-
-    dequeue(&testQueue, &result);
-    displayData("2 dequeue", testQueue);
-
+    printf("%s\n", convertQueueToString(testQueue));
+    
     return 0;
 }
 

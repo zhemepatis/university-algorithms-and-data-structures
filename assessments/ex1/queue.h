@@ -1,8 +1,8 @@
 #ifndef QUEUE_H
     #define QUEUE_H
-    #define MAX_QUEUE_LENGTH 4
-    #define MAX_QUEUE_STRING_LENGTH 5
-    #define MAX_INT_DIGIT_NUMBER 10
+    #define MAX_QUEUE_LENGTH 10
+    #define MAX_NODE_COUNT_IN_STRING 8
+    #define MAX_INT_DIGITS 11
 
     typedef struct node {
         int value;
@@ -24,5 +24,6 @@
     int queueIsFull(queue data);
     void makeEmptyQueue(queue data);
     queue cloneQueue(queue data);
+    char *convertQueueToString(queue data);
 
 #endif
