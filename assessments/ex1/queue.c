@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "queue.h"
 
@@ -94,8 +95,4 @@ void makeEmptyQueue(queue data) {
         currentNodePtr->value = 0;
         currentNodePtr = currentNodePtr->next;
     }
-}
-
-queue cloneQueue(queue data) {
-    
 }

@@ -1,6 +1,8 @@
 #ifndef QUEUE_H
     #define QUEUE_H
     #define MAX_QUEUE_LENGTH 4
+    #define MAX_QUEUE_STRING_LENGTH 5
+    #define MAX_INT_DIGIT_NUMBER 10
 
     typedef struct node {
         int value;

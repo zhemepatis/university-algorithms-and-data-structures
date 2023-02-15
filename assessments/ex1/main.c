@@ -43,8 +43,6 @@ int main() {
     dequeue(&testQueue, &result);
     displayData("2 dequeue", testQueue);
 
-
-
     return 0;
 }
 
