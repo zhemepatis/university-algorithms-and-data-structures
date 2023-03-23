@@ -1,80 +1,143 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <queue>
+#include <stack>
 #include <set>
 #include <map>
 #include <math.h>
 
 using namespace std;
 
-int checkInterpretation(map <char, int> layout, vector <string> words, int wordNum);
+void printQueue(queue <int> data);
+void printLayout(map <char, int> layout);
+
+void solve(map <char, int> &layout, bool &solutionIsFounded, queue <int> unusedNum, vector <string> words, queue <char> stack);
+int checkInterpretation(map <char, int> layout, vector <string> words);
 int convertWordToNum(map <char, int> layout, string word);
+
 
 int main() {
     ifstream fd ("duota.txt");
     ofstream fr ("rez.txt");
 
     vector <string> words;
-    int wordNum = 0;
+    map <char, int> characterLayout;
     set <char> characters;
-    int maxWordLength = 0;
 
-    //reading words, counting characters
+    // getting words, initialising layout map
     while(!fd.eof()) {
         string newWord;
         fd >> newWord;
 
-        words.push_back(newWord);
-        ++wordNum;
-
-        int currWordLength = newWord.length();
-        for(int i = 0; i < currWordLength; ++ i) {
-            characters.insert(toupper(newWord[i]));
+        int wordLength = newWord.length();
+        for(int i = 0; i < wordLength; ++i) {
+            char currCharacter = toupper(newWord[i]);
+            if(i == 0 || characters.count(tolower(currCharacter))) {
+                characters.erase(currCharacter);
+                currCharacter = tolower(currCharacter);
+            }
+            
+            characters.insert(currCharacter);
+            newWord[i] = currCharacter;  
+            characterLayout[currCharacter] = -1;
         }
+        words.push_back(newWord);
+    }
+    int wordNum = words.size();
 
-        maxWordLength = (newWord.length() > maxWordLength) ? newWord.length() : maxWordLength;
+    // filling stack with characters
+    queue <char> characterStack;
+    for(set <char> :: iterator i = characters.begin(); i != characters.end(); ++i) {
+        characterStack.push(*i);
     }
 
-    if(characters.size() > 10 || words[wordNum-1].length() < maxWordLength) {
-        fr << "Current cryptoarithmetic puzzle is impossible to solve.";
+    // creating and filling unused num queue
+    queue <int> unusedNum;
+    for(int i = 0; i < 10; ++i)
+        unusedNum.push(i);
+
+    // solving puzzle
+    bool solutionIsFounded = 0;
+    solve(characterLayout, solutionIsFounded, unusedNum, words, characterStack);
+
+    if(!solutionIsFounded) {
+        fr << "Unable to find solution." << endl;
         return 0;
     }
 
-    map <char, int> test;
-    test['A'] = 1;
-    test['B'] = 2;
-    test['C'] = 3;
+    fr << "Solution: " << endl;
+    for(map <char, int> :: iterator i = characterLayout.begin(); i != characterLayout.end(); ++i) {
+        char currCharacter = toupper(i->first);
+        fr << currCharacter << " = " << characterLayout[currCharacter] << " ";
+    }
+    fr << endl;
 
-    // int count = 0;
-    // for(set <char> :: iterator i = characters.begin(); i != characters.end(); ++i) {
-    //     test[*i] = count;
-    //     fr << *i << " " << test[*i] << endl;
-    //     ++count;
-    // }
-
-    if(checkInterpretation(test, words, wordNum))
-        fr << "alles gut!" << endl;
-
-    fr << "dirbam toliau" << endl;
-
-    fd.close();
-    fr.close();
+    for(int i = 0; i < wordNum; ++i) {
+        fr << words[i] << " = " << convertWordToNum(characterLayout, words[i]) << endl; 
+    }
 
     return 0;
 }
 
-int checkInterpretation(map <char, int> layout, vector <string> words, int wordNum) {
+void printQueue(queue <int> data) {
+    int queueLength = data.size();
+
+    cout << "Queue: ";
+    for(int i = 0; i < queueLength; ++i) {
+        cout << data.front();
+        data.pop();
+    }
+    cout << endl;
+}
+
+void printLayout(map <char, int> layout) {
+    cout << "Layout: ";
+    for(map <char, int> :: iterator i = layout.begin(); i != layout.end(); ++i) {
+        cout << i->first << ": " << i->second << ", ";
+    }
+    cout << endl;
+}
+
+void solve(map <char, int> &layout, bool &solutionIsFounded, queue <int> unusedNum, vector <string> words, queue <char> stack) {
+    printLayout(layout);
+    int unusedNumCount = unusedNum.size();
+    char currCharacter = stack.front();
+    stack.pop();
+
+    for(int i = 0; i < unusedNumCount; ++i) {
+        if(!solutionIsFounded) {
+            int assignedNum = unusedNum.front();
+            unusedNum.pop();
+            
+            if(assignedNum == 0 && islower(currCharacter)) {
+                unusedNum.push(assignedNum);
+                continue;
+            }
+            layout[currCharacter] = assignedNum;
+
+            if(!stack.empty()) {
+                solve(layout, solutionIsFounded, unusedNum, words, stack);
+                unusedNum.push(assignedNum);
+            }
+            else if (checkInterpretation(layout, words)) {
+                solutionIsFounded = 1;
+                break;
+            }
+        }        
+    }
+}
+
+int checkInterpretation(map <char, int> layout, vector <string> words) {
+    int wordCount = words.size();    
     int sum = 0;
     
-    for(int i = 0; i < wordNum-1; ++i) {
+    for(int i = 0; i < wordCount-1; ++i) {
         int currWordLength = words[i].length();
-        cout << words[i] << endl;
-        
         sum += convertWordToNum(layout, words[i]);
     }
-    cout << sum << endl;
 
-    if(sum == convertWordToNum(layout, words[wordNum-1]))
+    if(sum == convertWordToNum(layout, words[wordCount-1]))
         return 1;
         
     return 0;
@@ -85,9 +148,7 @@ int convertWordToNum(map <char, int> layout, string word) {
     int wordLength = word.length(); 
 
     for(int i = 0; i < wordLength; ++i)
-        result += layout[toupper(word[i])] * pow(10, wordLength - i - 1);
-
-    cout << result << endl;
+        result += layout[word[i]] * pow(10, wordLength - i - 1);
 
     return result;
 }
