@@ -2,30 +2,48 @@
 #include <fstream>
 #include <vector>
 #include <queue>
-#include <stack>
 #include <set>
 #include <map>
 #include <math.h>
 
 using namespace std;
 
-void printQueue(queue <int> data);
-void printLayout(map <char, int> layout);
-
+void printErr(string msg);
 void solve(map <char, int> &layout, bool &solutionIsFounded, queue <int> unusedNum, vector <string> words, queue <char> stack);
 int checkInterpretation(map <char, int> layout, vector <string> words);
 int convertWordToNum(map <char, int> layout, string word);
 
 
-int main() {
-    ifstream fd ("duota.txt");
-    ofstream fr ("rez.txt");
+int main(int argc, char **argv) {
+    if(argc != 3) {
+        printErr("nepakanka argumentų komandinėje eilutėje");
+        return 0;
+    }
 
+    string dataFileName = argv[1];
+    string resultFileName = argv[2];
+
+    ifstream fd (dataFileName);
+    cout << "Atidaromas įvesties failas: " << dataFileName << '\n';
+    if(!fd.is_open()) {
+        string msg = "nepavyksta atidaryti " + dataFileName;
+        printErr(msg);
+        return 0;
+    }
+    
+    ofstream fr (resultFileName);
+    cout << "Atidaromas išvesties failas: " << resultFileName << '\n';
+    if(!fr.is_open()) {
+        string msg = "nepavyksta atidaryti " + resultFileName;
+        printErr(msg);
+        return 0;
+    }
+
+    // reading data, adding characters to the set
     vector <string> words;
     map <char, int> characterLayout;
     set <char> characters;
 
-    // getting words, initialising layout map
     while(!fd.eof()) {
         string newWord;
         fd >> newWord;
@@ -39,68 +57,57 @@ int main() {
             }
             
             characters.insert(currCharacter);
-            newWord[i] = currCharacter;  
-            characterLayout[currCharacter] = -1;
+            newWord[i] = currCharacter;
         }
         words.push_back(newWord);
     }
     int wordNum = words.size();
 
-    // filling stack with characters
-    queue <char> characterStack;
-    for(set <char> :: iterator i = characters.begin(); i != characters.end(); ++i) {
-        characterStack.push(*i);
-    }
+    // creating queue filled with unsigned characters
+    queue <char> unsignedCharacters;
+    for(set <char> :: iterator i = characters.begin(); i != characters.end(); ++i)
+        unsignedCharacters.push(*i);
 
-    // creating and filling unused num queue
+    // creating queue filled with unsigned characters
     queue <int> unusedNum;
     for(int i = 0; i < 10; ++i)
         unusedNum.push(i);
 
-    // solving puzzle
+    // searching for solution if it possible to find one
     bool solutionIsFounded = 0;
-    solve(characterLayout, solutionIsFounded, unusedNum, words, characterStack);
+    solve(characterLayout, solutionIsFounded, unusedNum, words, unsignedCharacters);
 
+    // printing the results
     if(!solutionIsFounded) {
-        fr << "Unable to find solution." << endl;
+        fr << "Pateikta užduotis sprendimo neturi." << endl;
         return 0;
     }
 
-    fr << "Solution: " << endl;
+    fr << "Užduoties sprendimas: " << endl;
     for(map <char, int> :: iterator i = characterLayout.begin(); i != characterLayout.end(); ++i) {
-        char currCharacter = toupper(i->first);
-        fr << currCharacter << " = " << characterLayout[currCharacter] << " ";
+        char currCharacter = i->first;
+        fr << (char) toupper(currCharacter) << " = " << characterLayout[currCharacter] << " ";
     }
-    fr << endl;
+    fr << "\n\n";
 
     for(int i = 0; i < wordNum; ++i) {
-        fr << words[i] << " = " << convertWordToNum(characterLayout, words[i]) << endl; 
+        int currWordLength = words[i].length();
+        int currWordValue = convertWordToNum(characterLayout, words[i]);
+        
+        for(int j = 0; j < currWordLength; ++j)
+            words[i][j] = toupper(words[i][j]);
+
+        fr << words[i] << " = " << currWordValue << '\n';
     }
 
     return 0;
 }
 
-void printQueue(queue <int> data) {
-    int queueLength = data.size();
-
-    cout << "Queue: ";
-    for(int i = 0; i < queueLength; ++i) {
-        cout << data.front();
-        data.pop();
-    }
-    cout << endl;
-}
-
-void printLayout(map <char, int> layout) {
-    cout << "Layout: ";
-    for(map <char, int> :: iterator i = layout.begin(); i != layout.end(); ++i) {
-        cout << i->first << ": " << i->second << ", ";
-    }
-    cout << endl;
+void printErr(string msg) {
+    cout << "Klaida: " << msg << '\n';
 }
 
 void solve(map <char, int> &layout, bool &solutionIsFounded, queue <int> unusedNum, vector <string> words, queue <char> stack) {
-    printLayout(layout);
     int unusedNumCount = unusedNum.size();
     char currCharacter = stack.front();
     stack.pop();
