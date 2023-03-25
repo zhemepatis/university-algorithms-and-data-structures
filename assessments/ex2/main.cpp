@@ -48,6 +48,9 @@ int main(int argc, char **argv) {
         string newWord;
         fd >> newWord;
 
+        if(newWord.empty())
+            continue;
+
         int wordLength = newWord.length();
         for(int i = 0; i < wordLength; ++i) {
             char currCharacter = toupper(newWord[i]);
