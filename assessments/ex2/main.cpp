@@ -16,7 +16,7 @@ int convertWordToNum(map <char, int> layout, string word);
 
 int main(int argc, char **argv) {
     if(argc != 3) {
-        printErr("nepakanka argumentų komandinėje eilutėje");
+        printErr("too few arguments provided");
         return 0;
     }
 
@@ -24,17 +24,17 @@ int main(int argc, char **argv) {
     string resultFileName = argv[2];
 
     ifstream fd (dataFileName);
-    cout << "Atidaromas įvesties failas: " << dataFileName << '\n';
+    cout << "Opening input file: " << dataFileName << '\n';
     if(!fd.is_open()) {
-        string msg = "nepavyksta atidaryti " + dataFileName;
+        string msg = "unable to open " + dataFileName;
         printErr(msg);
         return 0;
     }
     
     ofstream fr (resultFileName);
-    cout << "Atidaromas išvesties failas: " << resultFileName << '\n';
+    cout << "Opening output file: " << resultFileName << '\n';
     if(!fr.is_open()) {
-        string msg = "nepavyksta atidaryti " + resultFileName;
+        string msg = "unable to open " + resultFileName;
         printErr(msg);
         return 0;
     }
@@ -82,11 +82,11 @@ int main(int argc, char **argv) {
 
     // printing the results
     if(!solutionIsFounded) {
-        fr << "Pateikta užduotis sprendimo neturi." << endl;
+        fr << "Provided puzzle don't have a solution." << endl;
         return 0;
     }
 
-    fr << "Užduoties sprendimas: " << endl;
+    fr << "Solution: " << endl;
     for(map <char, int> :: iterator i = characterLayout.begin(); i != characterLayout.end(); ++i) {
         char currCharacter = i->first;
         fr << (char) toupper(currCharacter) << " = " << characterLayout[currCharacter] << " ";
@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
 }
 
 void printErr(string msg) {
-    cout << "Klaida: " << msg << '\n';
+    cout << "Error: " << msg << '\n';
 }
 
 void solve(map <char, int> &layout, bool &solutionIsFounded, queue <int> unusedNum, vector <string> words, queue <char> stack) {
