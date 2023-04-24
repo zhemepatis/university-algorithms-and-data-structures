@@ -1,7 +1,7 @@
 #ifndef STACK_H
     #define STACK_H
 
-    #define DATA int
+    #define DATA double
     //norint pakeisti steko saugomu duomenu tipa
 
     #include <stdlib.h>

@@ -1,19 +1,14 @@
 #include <stdio.h>
-#include <string.h>
 
 #include "queue.h"
 #include "stack.h"
+#include "io.h"
 
 #define DAY_NUM 20
 
-FILE *openFile(char *filename, char *mode);
-double getLineInput(FILE *stream);
-
-void printErr(char *msg);
-void printDailyReport(FILE *stream, int day, double cropsBought, double purchasePrice, double cropsSold, double lifoSellingPrice, double fifoSellingPrice, double profit);
-void printSummaryReport(FILE *stream, double cropsSold, double profit);
-
 double getRandomNum(int lowerBound, int upperBound);
+double lifoCalculateAccountingPrice(stack *storage, stack *prices);
+void lifoSellCrops(stack *storage, stack *prices, double amount);
 
 
 int main(int argc, char **argv) {
@@ -35,9 +30,12 @@ int main(int argc, char **argv) {
     double salesMarkup = getLineInput(in) / 100;
 
     // calculations
-    stack lifoSaleModel;
+    stack *lifoCropAmounts = stackCreate(DAY_NUM);
+    stack *lifoCropPrices = stackCreate(DAY_NUM);
     queue fifoSaleModel;
+    initialiseQueue(&fifoSaleModel);
     double cropsLeft = .0;
+    double overallSpent = .0;
     double overallFifoProfit = .0;
     double overallLifoProfit = .0;
     double overallCropsSold = .0;
@@ -45,11 +43,16 @@ int main(int argc, char **argv) {
     fprintf(out, "\t--- DAILY REPORTS ---\n\n");
     for(int i = 0; i < DAY_NUM; ++i) {
         double cropsBought = getRandomNum(amountRate*(1.0-maxAmountDeviation), amountRate*(1.0+maxAmountDeviation));
+        push(lifoCropAmounts, cropsBought);
         cropsLeft += cropsBought;
+
         double purchasePrice = getRandomNum(priceRate*(1.0-maxPriceDeviation), priceRate*(1.0+maxPriceDeviation));
+        push(lifoCropPrices, purchasePrice);
+
         double cropsSold = getRandomNum(0, 100)/100*cropsLeft;
         overallCropsSold += cropsSold;
-        double lifoSellingPrice = 0.0;
+        
+        double lifoSellingPrice = lifoCalculateAccountingPrice(lifoCropAmounts, lifoCropPrices);
         double fifoSellingPrice = 0.0;
         double profit = 0.0;
 
@@ -75,44 +78,39 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-FILE *openFile(char *filename, char *mode) {
-    FILE *stream = fopen(filename, mode);
-
-    printf("Opening input file: %s\n", filename);
-    if(!stream) {
-        char* msg = strcat("unable to open ", filename);
-        printErr(msg);
-        return 0;
-    }
-
-    return stream;
-}
-
-double getLineInput(FILE *stream) {
-    double input;
-    fscanf(stream, "%lf%*[^\n]%*c", &input);
-    return input;
-}
-
-void printErr(char *msg) {
-    printf("Error: %s\n", msg);
-}
-
-void printDailyReport(FILE *stream, int day, double cropsBought, double purchasePrice, double cropsSold, double lifoSellingPrice, double fifoSellingPrice, double profit) {
-    fprintf(stream, "DAY - %d\n", day);
-    fprintf(stream, "\tCrops were bought: %.2lf (t)\n", cropsBought);
-    fprintf(stream, "\tPurchase price: %.2lf (eur)\n", purchasePrice);
-    fprintf(stream, "\tCrops sold: %.2lf (t)\n", cropsSold);
-    fprintf(stream, "\tSelling price (LIFO): %.2lf (eur)\n", lifoSellingPrice);
-    fprintf(stream, "\tSelling price (FIFO): %.2lf (eur)\n", fifoSellingPrice);
-    fprintf(stream, "\tDaily profit: %.2lf (eur)\n", profit);
-}
-
-void printSummaryReport(FILE *stream, double cropsSold, double profit) {
-    fprintf(stream, "\tOverall crops sold: %.2f (t)\n", cropsSold);
-    fprintf(stream, "\tOverall profit: %.2f (eur)\n", profit);
-}
-
 double getRandomNum(int lowerBound, int upperBound) {
     return rand() % (upperBound - lowerBound + 1) + lowerBound;
+}
+
+double lifoCalculateAccountingPrice(stack *storage, stack *prices) {
+    stack *tempStorage = stackClone(storage);
+    stack *tempPrices = stackClone(prices);
+    int size = stackCount(tempStorage);
+
+    double overallBought = .0;
+    double overallSpent = .0;
+    
+    for(int i = 0; i < size; ++i) {
+        double currAmount = pop(tempStorage);
+        overallBought += currAmount;
+        double currPrice = pop(tempPrices);
+        overallSpent += currPrice*currAmount;
+    }
+
+    return overallSpent/overallBought;
+}
+
+void lifoSellCrops(stack *storage, stack *prices, double amount) {
+    while(amount != 0){
+        double currPart = pop(storage);
+
+        if(currPart > amount) {
+            currPart -= amount;
+            amount = 0.0;
+            push(storage, currPart);
+        }
+        else if(currPart <= amount) {
+            
+        }
+    }
 }
