@@ -23,7 +23,7 @@ int queueIsFull(queue data) {
     return 0;
 }
 
-int enqueue(queue *data, int value) {
+double enqueue(queue *data, double value) {
     if(queueIsFull(*data))
         return 0;
 
@@ -44,7 +44,7 @@ int enqueue(queue *data, int value) {
     return 1;
 }
 
-int dequeue(queue *data, int *storage) {
+int dequeue(queue *data, double *storage) {
     if(queueIsEmpty(*data))
         return 0;
 
@@ -59,7 +59,7 @@ int dequeue(queue *data, int *storage) {
     return 1;  
 }
 
-int peekQueue(queue data, int *storage) {
+int peekQueue(queue data, double *storage) {
     if(queueIsEmpty(data))
         return 0;
 
@@ -125,7 +125,7 @@ char *convertQueueToString(queue data) {
 
     while(currentNodePtr != NULL && nodeCount < MAX_NODE_COUNT_IN_STRING) {
         char numStr[MAX_INT_DIGITS+1];
-        sprintf(numStr, " %d", currentNodePtr->value);        
+        sprintf(numStr, " %lf", currentNodePtr->value);        
         strcat(str, numStr);
         
         currentNodePtr = currentNodePtr->next;

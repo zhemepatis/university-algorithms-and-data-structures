@@ -5,7 +5,7 @@
     double getLineInput(FILE *stream);
 
     void printErr(char *msg);
-    void printDailyReport(FILE *stream, int day, double cropsBought, double purchasePrice, double cropsSold, double lifoSellingPrice, double fifoSellingPrice, double profit);
+    void printDailyReport(FILE *stream, int day, double cropsBought, double purchasePrice, double cropsSold, double lifoProfit, double fifoProfit);
     void printSummaryReport(FILE *stream, double cropsSold, double profit);
 
 #endif

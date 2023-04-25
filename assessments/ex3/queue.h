@@ -1,11 +1,11 @@
 #ifndef QUEUE_H
     #define QUEUE_H
-    #define MAX_QUEUE_LENGTH 10
+    #define MAX_QUEUE_LENGTH 30
     #define MAX_NODE_COUNT_IN_STRING 8
     #define MAX_INT_DIGITS 11
 
     typedef struct node {
-        int value;
+        double value;
         struct node *next;
     } queue_node;
 
@@ -15,9 +15,9 @@
     } queue;
 
     void initialiseQueue(queue *data);
-    int enqueue(queue *data, int value);
-    int dequeue(queue *data, int *storage);
-    int peekQueue(queue data, int *storage);
+    double enqueue(queue *data, double value);
+    int dequeue(queue *data, double *storage);
+    int peekQueue(queue data, double *storage);
     int queueLength(queue data);
     void destroyQueue(queue *data);
     int queueIsEmpty(queue data);

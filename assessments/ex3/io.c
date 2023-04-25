@@ -26,14 +26,13 @@ void printErr(char *msg) {
     printf("Error: %s\n", msg);
 }
 
-void printDailyReport(FILE *stream, int day, double cropsBought, double purchasePrice, double cropsSold, double lifoSellingPrice, double fifoSellingPrice, double profit) {
+void printDailyReport(FILE *stream, int day, double cropsBought, double purchasePrice, double cropsSold, double lifoProfit, double fifoProfit) {
     fprintf(stream, "DAY - %d\n", day);
     fprintf(stream, "\tCrops were bought: %.2lf (t)\n", cropsBought);
     fprintf(stream, "\tPurchase price: %.2lf (eur)\n", purchasePrice);
     fprintf(stream, "\tCrops sold: %.2lf (t)\n", cropsSold);
-    fprintf(stream, "\tSelling price (LIFO): %.2lf (eur)\n", lifoSellingPrice);
-    fprintf(stream, "\tSelling price (FIFO): %.2lf (eur)\n", fifoSellingPrice);
-    fprintf(stream, "\tDaily profit: %.2lf (eur)\n", profit);
+    fprintf(stream, "\tDaily profit (LIFO): %.2lf (eur)\n", lifoProfit);
+    fprintf(stream, "\tDaily profit (FIFO): %.2lf (eur)\n", fifoProfit);
 }
 
 void printSummaryReport(FILE *stream, double cropsSold, double profit) {
