@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <stack>
 #include <algorithm>
 #include <math.h>
 
@@ -9,9 +10,17 @@ using namespace std;
 void printErr(string msg);
 void printArr(double **arr, int arrSize);
 
-int getElementIndex(vector <string> vector, string element);
 void reallocArr(double ***arr, int newSize);
 void freeArr(double ***arr, int size);
+
+int getElementIndex(vector <string> vector, string element);
+
+class GraphNode {
+    public: 
+        int index;
+        double sum;
+        vector <int> route;
+};
 
 int main(int argc, char **argv) {
     if(argc != 3) {
@@ -38,8 +47,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    // getting data
     vector <string> cityList;
-    double **tripCosts;
+    double **tripCosts = NULL;
     while(!fd.eof()) {
         string firstCity, secondCity;
         double cost;
@@ -65,10 +75,69 @@ int main(int argc, char **argv) {
         tripCosts[firstCityIndex][secondCityIndex] = cost;
         tripCosts[secondCityIndex][firstCityIndex] = cost;
     }
-    // printArr(tripCosts, cityList.size());
+    int cityNum = cityList.size();
 
 
+    int destIndex = 2;
+    int srcIndex = 3;
+    
+    // searching for the cheapest route
+    stack <GraphNode> nodes;
+    GraphNode firstNode;
+
+    firstNode.index = srcIndex;
+    firstNode.sum = 0;
+    firstNode.route.push_back(srcIndex);
+
+    nodes.push(firstNode);
+
+    bool isVisited[cityNum] = {false};
+    double result = -1;
+    vector <int> cheapestRoute;
+
+    while(!nodes.empty()) {
+        GraphNode currNode = nodes.top();
+        nodes.pop();
+
+        int currCityIndex = currNode.index;
+        double currSum = currNode.sum;
+        vector <int> travelledRoute = currNode.route;
+
+
+        if(currCityIndex == destIndex && (result == -1 || result > currSum)) {
+            result = currSum;
+            cout << "Current node: " << currCityIndex << " " << currSum << endl;
+
+            cheapestRoute.clear();
+            copy(travelledRoute.begin(), travelledRoute.end(), back_inserter(cheapestRoute));
+
+            continue;
+        }
+
+        for(int i = 0; i < cityNum; ++i) {
+            if(!isVisited[i] && tripCosts[currCityIndex][i] != 0) {        
+                GraphNode tempNode;
+
+                tempNode.index = i;
+                tempNode.sum = currSum + tripCosts[currCityIndex][i];
+                travelledRoute.push_back(i);
+                copy(travelledRoute.begin(), travelledRoute.end(), back_inserter(tempNode.route));
+
+                nodes.push(tempNode);
+                
+                isVisited[i] = true;
+            }
+        }
+    }
     freeArr(&tripCosts, cityList.size());
+
+    // printing results
+    int routeLength = cheapestRoute.size();
+    fr << "Cheapest route: ";
+    for(int i = 0; i < routeLength; ++i) {
+        fr << cityList[cheapestRoute[i]] << " ";
+    }
+    fr << "\nRoute price: " << result;
 
     return 0;
 }
@@ -88,15 +157,6 @@ void printArr(double **arr, int arrSize) {
     }
 }
 
-int getElementIndex(vector <string> vector, string element) {
-    auto it = find(vector.begin(), vector.end(), element);
-
-    if(it != vector.end())
-        return abs(distance(it, vector.begin()));
-
-    return -1;
-}
-
 void reallocArr(double ***arr, int newSize) {
     *arr = (double **) realloc(*arr, newSize*sizeof(double *));
     for(int i = 0; i < newSize; ++i) {
@@ -109,4 +169,13 @@ void freeArr(double ***arr, int size) {
         free((*arr)[i]);
     }
     free(*arr);
+}
+
+int getElementIndex(vector <string> vector, string element) {
+    auto it = find(vector.begin(), vector.end(), element);
+
+    if(it != vector.end())
+        return abs(distance(it, vector.begin()));
+
+    return -1;
 }
