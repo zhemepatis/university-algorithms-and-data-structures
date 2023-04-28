@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     }
 
     vector <string> cityList;
-    double **tripCosts = new double*;
+    double **tripCosts;
     while(!fd.eof()) {
         string firstCity, secondCity;
         double cost;
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     }
     // printArr(tripCosts, cityList.size());
 
-    
+
     freeArr(&tripCosts, cityList.size());
 
     return 0;
