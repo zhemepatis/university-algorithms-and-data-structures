@@ -1,8 +1,6 @@
-#ifndef MEMORY_HPP
+#pragma once
 
-    using namespace std;
+using namespace std;
 
-    void reallocArr(double ***arr, int newSize);
-    void freeArr(double ***arr, int size);
-
-#endif
+void reallocArr(double ***arr, int newSize);
+void freeArr(double ***arr, int size);

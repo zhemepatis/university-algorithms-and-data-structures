@@ -1,7 +1,7 @@
-#ifndef IO_HPP
-    #include <iostream>
+#pragma once
 
-    using namespace std;
+#include <iostream>
 
-    void printErr(string msg);  
-#endif
+using namespace std;
+
+void printErr(string msg);  
