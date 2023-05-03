@@ -4,20 +4,27 @@
 #include "./memory.hpp"
 
 void reallocArr(double ***arr, int newSize) {
-    *arr = (double **) realloc(*arr, newSize*sizeof(double *));
+    double **newArr = new double *[newSize];
 
     for(int i = 0; i < newSize; ++i) {
-        (*arr)[i] = (double *) realloc((*arr)[i], newSize*sizeof(double));
+        newArr[i] = new double [newSize];
     }
-    
-    double *startPtr = (*arr)[newSize-1];
-    double *endPtr = &((*arr)[newSize-1][newSize-1]);
-    fill(startPtr, endPtr, 0);
+
+    for(int i = 0; i < newSize-1; ++i) {
+        for(int j = 0; j < newSize-1; ++j) {
+            newArr[i][j] = (*arr)[i][j];
+        }
+        newArr[i][newSize-1] = 0;
+        newArr[newSize-1][i] = 0;
+    }
+
+    freeArr(arr, newSize-1);
+    *arr = newArr;
 }
 
 void freeArr(double ***arr, int size) {
     for(int i = 0; i < size; ++i) {
-        free((*arr)[i]);
+        delete [] (*arr)[i];
     }
-    free(*arr);
+    delete [] *arr;
 }

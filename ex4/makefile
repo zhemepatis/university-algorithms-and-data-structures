@@ -1,16 +1,18 @@
+CXX = g++
+CXXFLAGS = -c
+
 make: main.out
 	./main.out input.txt output.txt
 
 main.out: io.o memory.o main.o 
-	g++ io.o memory.o main.o -o main.out
-	rm *.o
+	${CXX} io.o memory.o main.o -o main.out
 	
 main.o: main.cpp
-	g++ -c main.cpp
+	${CXX} ${CXXFLAGS} main.cpp
 
 memory.o: memory.hpp memory.cpp
-	g++ -c memory.cpp 
+	${CXX} ${CXXFLAGS} memory.cpp 
 
 io.o: io.hpp io.cpp
-	g++ -c io.cpp 
+	${CXX} ${CXXFLAGS} io.cpp 
 

@@ -17,7 +17,7 @@ class GraphNode {
         vector <int> route;
 };
 
-int getElementIndex(vector <string> vector, string element);
+int getElementIndex(vector <string> elmentList, string element);
 int getCity(string label, vector <string> cityList);
 
 int main(int argc, char **argv) {
@@ -162,11 +162,11 @@ int getCity(string label, vector <string> cityList) {
     return cityIndex;
 }
 
-int getElementIndex(vector <string> vector, string element) {
-    auto it = find(vector.begin(), vector.end(), element);
+int getElementIndex(vector <string>  elmentList, string element) {
+    vector <string> :: iterator it = find(elmentList.begin(), elmentList.end(), element);
 
-    if(it != vector.end())
-        return abs(distance(it, vector.begin()));
+    if(it != elmentList.end())
+        return abs(distance(it, elmentList.begin()));
 
     return -1;
 }
